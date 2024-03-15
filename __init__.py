@@ -1,15 +1,15 @@
-from mycroft import MycroftSkill, intent_handler
-from mycroft.skills import resting_screen_handler
-
+from ovos_workshop.skills import OVOSSkill
+from ovos_workshop.decorators import intent_handler
+from ovos_workshop.decorators import resting_screen_handler
 
 MARK_II = "mycroft_mark_2"
 
 
-class WebpageHomescreen(MycroftSkill):
-    def __init__(self):
-        MycroftSkill.__init__(self)
+class WebpageHomescreen(OVOSSkill):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.is_active = False
-        self.platform = self.config_core["enclosure"].get("platform", "unknown")
 
     def initialize(self):
         """Perform final setup of Skill."""
@@ -20,8 +20,6 @@ class WebpageHomescreen(MycroftSkill):
     def get_intro_message(self):
         """Provide instructions on first install."""
         self.speak_dialog("setting-url")
-        if self.platform == MARK_II:
-            self.speak_dialog("selecting-homescreen")
 
     @resting_screen_handler("Webpage Homescreen")
     def handle_request_to_use_homescreen(self, _):
@@ -55,7 +53,3 @@ class WebpageHomescreen(MycroftSkill):
     def shutdown(self):
         """Actions to perform when Skill is shutting down."""
         self.cancel_all_repeating_events()
-
-
-def create_skill():
-    return WebpageHomescreen()
